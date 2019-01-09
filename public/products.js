@@ -126,7 +126,7 @@ const products = [{
   ]
   }, {
     "_id": 6,
-    "name": "Fresh Sugar Honey Tinted Lip Treatment SPF15",
+    "name": "Fresh Sugar Sweet Honey Tinted Lip Treatment SPF15",
     "description": "Fix those chapped lips. ",
     "reviews": 79,
     "rating": 3,
@@ -146,7 +146,7 @@ const products = [{
   ]
   }, {
     "_id": 7,
-    "name": "LBel",
+    "name": "Sweet LBel",
     "description": "2-Propanol",
     "reviews": 76,
     "rating": 3,
