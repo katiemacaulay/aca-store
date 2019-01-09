@@ -1,14 +1,25 @@
 "use strict";
+// display all front page products
+document.getElementById("itemlist").innerHTML = products.map((item,index)=>{
+    return `<img src=${item.imgUrl} alt=${item.description}/>
+    <li>${item.name}, Stars: ${item.rating}, Reviews: ${item.reviews.length} 
+    From: ${item.price} <button>See Details</button></li>`
+  }).join('');
+  
 
 function searching(){
     let foundProducts = [];
-    products.forEach((item, index) => {
+    products.map((item, index) => {
         let nameArray = item.name.split(' ')
         nameArray.filter(names =>{
             if(names == document.getElementById('mySearch').value){
-                foundProducts.push(item.name)
+                foundProducts.push(item)
             }
         })
     })
-return document.getElementById('searchedItems').innerHTML = foundProducts.map(product => `<li>${product}</li>`).join('')
+return document.getElementById('itemlist').innerHTML = foundProducts.map(product => 
+    `<img src=${product.imgUrl} alt=${product.description}/>
+    <li>${product.name}, Stars: ${product.rating}, Reviews: ${product.reviews.length} 
+    From: ${product.price} <button>See Details</button></li>`).join('')
 }
+
