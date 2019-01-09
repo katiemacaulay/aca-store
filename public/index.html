@@ -8,13 +8,21 @@
    
 </head>
 <body>
-    <div id="searchBar">
-        <input type="text" id="mySearch" value="Sweet"></input>
-        <button onclick="searching()" >search</button>
-    </div>  
+    <nav>
+        <div id="searchBar">
+            <input type="text" id="mySearch" value="Sweet"></input>
+            <button onclick="searching()" >search</button>
+        </div> 
+        <button id="shoppingCart">View Cart</button>
+    </nav>
     <div id="showProducts">
-            <!-- Our site is very simple, we only have a few hard coded products and we display all the products on the front page. Decide how you would like to display the products in your web page. Use <div> <ul> or <ol>. Show the product name, rating, number of reviews and price. Include a link or button that should be clicked on so that you can see the details of the product. Our store is very simple, we just show every product there is by default -->
+            <!-- Show the product name, rating, number of reviews and price. Include a link or button that should be clicked on so that you can see the details of the product. Our store is very simple, we just show every product there is by default -->
         <ul id="itemlist"></ul>
+    </div>
+    <div id="cartProducts">
+        <button>remove</button>
+        <button>add</button>
+        <button>Checkout</button>
     </div>
     <script src="products.js"></script> 
     <script src="index.js"></script>        
