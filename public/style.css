@@ -1,0 +1,25 @@
+body{
+    margin: 0px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color:#252f3d;
+    color: white;
+    height: 100px;
+}
+#fakeNav{
+    height: 75px;
+    background-color: white;
+    
+}
+#productOverview{
+    display: flex;
+    justify-content: space-around;
+}
+#itemstyling{
+    display:flex;
+    flex-direction: column;
+}
