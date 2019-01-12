@@ -1,17 +1,28 @@
 "use strict";
 
+let cart = [];
+
 function mainPage(productsData){
+    document.getElementById("reviews").innerHTML = ""
     document.getElementById("itemlist").innerHTML = productsData.map((item,index)=>{
     return `<img src=${item.imgUrl} alt=${item.description}/>
-    <li>${item.name}, 
-    Stars: ${item.rating}, 
-    Reviews: ${item.reviews.length} 
-    From: ${item.price} 
+    <li>${item.name}
+        Stars: ${item.rating}
+        Reviews: ${item.reviews.length} 
+        From: ${item.price} 
     <button onClick="showProduct(${index})">See Details</button> 
-    <button onClick="addToCart()">Add to Cart</button></li>`
-  }).join('');
+    <button onClick="addToCart(${index})">Add to Cart</button></li>`
+  });
 }
 mainPage(products)
+
+window.onload = function(){
+    cart = JSON.parse(sessionStorage.getItem("product"))
+    if(cart==undefined){
+        cart=[];
+    }    
+    console.log(cart)
+}
 
 function showProduct(productNumber){
     let product = products[productNumber]
@@ -27,7 +38,7 @@ function showProduct(productNumber){
                 <div>Category:${product.category}</div>
                 <button onClick="showReviews(${productNumber})"> Show Reviews </button>
             </div>
-            <button onClick="addToCart()" id="">Add to Cart</button></div>
+            <button onClick="addToCart(${productNumber})" id="${productNumber}">Add to Cart</button></div>
         </div>`
 }
 
@@ -53,8 +64,15 @@ return mainPage(foundProducts)
 }
 
 function addShoppingCartButtons(){
-    return document.getElementById("cart").innerHTML =
-        `<button>remove</button>
-        <button>add</button>
-        <button>Checkout</button>`
+    return document.getElementById("itemlist").innerHTML =
+    cart.map((products, index) => {
+        return `<li>${products} </li>`
+    }).join('');  
+
+}
+
+function addToCart(productNumber){
+    let product = products[productNumber]
+    cart.push(product.name)
+    sessionStorage.setItem("product", JSON.stringify(cart))
 }
