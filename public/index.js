@@ -21,7 +21,6 @@ window.onload = function(){
     if(cart==undefined){
         cart=[];
     }    
-    console.log(cart)
 }
 
 function showProduct(productNumber){
@@ -63,16 +62,22 @@ function searching(){
 return mainPage(foundProducts)
 }
 
-function addShoppingCartButtons(){
+function viewCart(){
     return document.getElementById("itemlist").innerHTML =
     cart.map((products, index) => {
-        return `<li>${products} </li>`
-    }).join('');  
-
+        return `<li>${products}</li>
+        <button onclick="removeProduct(${index})"> remove </button>`
+    }).join('')
 }
 
 function addToCart(productNumber){
     let product = products[productNumber]
     cart.push(product.name)
+    sessionStorage.setItem("product", JSON.stringify(cart))
+}
+
+function removeProduct(index){
+    cart.splice(index, 1)
+    viewCart();
     sessionStorage.setItem("product", JSON.stringify(cart))
 }
