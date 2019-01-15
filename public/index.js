@@ -1,6 +1,8 @@
 "use strict";
 
 let cart = [];
+let timeAlert;
+let timeInterval = true;
 
 function mainPage(productsData){
     document.getElementById("reviews").innerHTML = ""
@@ -20,7 +22,8 @@ window.onload = function(){
     cart = JSON.parse(sessionStorage.getItem("product"))
     if(cart==undefined){
         cart=[];
-    }    
+    }  
+    pageAlert(); 
 }
 
 function showProduct(productNumber){
@@ -63,7 +66,8 @@ return mainPage(foundProducts)
 }
 
 function viewCart(){
-    return document.getElementById("itemlist").innerHTML =
+    document.getElementById("reviews").innerHTML = ""
+    document.getElementById("itemlist").innerHTML =
     cart.map((products, index) => {
         return `<li>${products}</li>
         <button onclick="removeProduct(${index})"> remove </button>`
@@ -80,4 +84,20 @@ function removeProduct(index){
     cart.splice(index, 1)
     viewCart();
     sessionStorage.setItem("product", JSON.stringify(cart))
+}
+
+let settingAlert = () => {
+    alert("Are you still there?")
+}
+
+
+function pageAlert(){
+    if(timeInterval){
+        timeAlert = setInterval(settingAlert, 60000)
+        timeInterval = false;
+    } else {
+        clearInterval(timeAlert)
+        timeInterval = true;
+        pageAlert()
+    }
 }
