@@ -3,6 +3,19 @@
 let cart = [];
 let timeAlert;
 let timeInterval = true;
+let txtEmail = null;
+let txtPassword = null;
+let btnSignUp = null;
+let signup = null;
+let products = [];
+
+
+fetch("https://acastore.herokuapp.com/products")
+    .then(response=> response.json())
+    .then(productsYeah=>{
+        products = productsYeah
+        mainPage(products)
+    });
 
 function mainPage(productsData){
     document.getElementById("reviews").innerHTML = ""
@@ -10,14 +23,13 @@ function mainPage(productsData){
     return `<img src=${item.imgUrl} alt=${item.description}/>
     <li>${item.name}
         Stars: ${item.rating}
-        Reviews: ${item.reviews.length} 
+        
         From: ${item.price} 
         Category: ${item.category}
     <button onClick="showProduct(${index})">See Details</button> 
     <button onClick="addToCart(${index})">Add to Cart</button></li>`
   });
 }
-mainPage(products)
 
 window.onload = function(){
     cart = JSON.parse(sessionStorage.getItem("product"))
@@ -26,6 +38,7 @@ window.onload = function(){
     }  
     pageAlert(); 
     findCategories();
+    mainPage(products)
 }
 
 function showProduct(productNumber){
@@ -53,6 +66,23 @@ function showReviews(productNumber){
          return `<li>User Rating: ${review.rating} </br> ${review.description} </li>`
      }).join('');
 }
+
+function addUser(){
+    return document.getElementById("itemlist").innerHTML =
+    `<div id="signup">
+        Email <input id="email" > <br>
+        Password <input id="password" > <br>
+         <button type="button" id="btnSignUp" onClick="signUp()">Sign Up</button>
+    </div>`
+}
+
+function signUp(){
+    let email = txtEmail.value;
+    let password = txtPassword.value;
+    home.style.display = "block";
+    signup.style.display = "none";
+    console.log(email, password)
+  }
 
 function searching(){
     let foundProducts = [];
