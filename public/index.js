@@ -14,7 +14,6 @@ fetch("https://acastore.herokuapp.com/products")
     .then(response=> response.json())
     .then(productsYeah=>{
         products = productsYeah
-        mainPage(products)
     });
 
 function mainPage(productsData){
@@ -38,7 +37,7 @@ window.onload = function(){
     }  
     pageAlert(); 
     findCategories();
-    mainPage(products)
+    addUser()
 }
 
 function showProduct(productNumber){
