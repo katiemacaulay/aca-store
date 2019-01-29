@@ -210,18 +210,18 @@ function viewCart(){
 }
 
 function addToCart(productNumber){
-    fetch(`https://acastore.herokuapp.com/cart/{cartId}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({products: }), 
-        })
-        .then(response => response.json())
-        .then(product =>{
-            console.log(product)
+    // fetch(`https://acastore.herokuapp.com/cart/{cartId}`, {
+    //         method: "PUT",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({products: }), 
+    //     })
+    //     .then(response => response.json())
+    //     .then(product =>{
+    //         console.log(product)
 
-        })
+    //     })
     console.log(user)
     let product = products[productNumber]
     cart.push([product.name, product.price])
