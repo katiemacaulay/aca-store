@@ -1,20 +1,34 @@
 "use strict";
 
 let cart = [];
+let users = [];
 let timeAlert;
 let timeInterval = true;
-let txtEmail = null;
-let txtPassword = null;
 let btnSignUp = null;
 let signup = null;
 let products = [];
+let user;
 
+// let options = {
+//     method: "POST",  //this is the drop down from post man
+//     headers: {
+//       "Content-Type": "application/json"
+//     },body: JSON.stringify({name: "Jon"}) //this is the bottom part of postman
+//    };   
+
+fetch("https://acastore.herokuapp.com/users", options).then((res) => {
+    return res.json();
+  }).then((data)=>{
+    users = data
+  });
+  
 
 fetch("https://acastore.herokuapp.com/products")
     .then(response=> response.json())
     .then(productsYeah=>{
         products = productsYeah
     });
+
 
 function mainPage(productsData){
     document.getElementById("reviews").innerHTML = ""
@@ -37,10 +51,19 @@ window.onload = function(){
     }  
     pageAlert(); 
     findCategories();
-    addUser()
+    user = JSON.parse(sessionStorage.getItem("user"))
+    console.log(user)
+    if(user==null){
+        addUser()
+    } else {
+        getProducts().then((products) => {
+            mainPage(products)
+        })
+    }
 }
 
 function showProduct(productNumber){
+    console.log(productNumber)
     let product = products[productNumber]
     document.getElementById("itemlist").innerHTML =
         `<div id="productOverview">
@@ -71,16 +94,68 @@ function addUser(){
     `<div id="signup">
         Email <input id="email" > <br>
         Password <input id="password" > <br>
-         <button type="button" id="btnSignUp" onClick="signUp()">Sign Up</button>
+         <button type="button" id="btnSignUp" onClick="signUp()">Sign Up or Log-In</button>
     </div>`
 }
 
+let currentUser;
+
 function signUp(){
-    let email = txtEmail.value;
-    let password = txtPassword.value;
-    home.style.display = "block";
-    signup.style.display = "none";
-    console.log(email, password)
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    let cartId = (users.length + 1) 
+    let foundUser = false;
+
+    users.map((user, index)=>{
+        if(user.email === email && user.password === password){
+            currentUser = user
+            foundUser = true
+        } else if(user.email === email && user.password !== password){
+            foundUser = null
+        }
+    })
+
+    if(foundUser === true){
+        document.getElementById("fakeNav").innerHTML =
+        `Welcome ` + currentUser.email + `, you are logged in!`
+        mainPage(products)
+        sessionStorage.setItem("user", JSON.stringify(currentUser))
+    } else if(foundUser === null){
+        document.getElementById("itemlist").innerHTML = 
+        `<div id="signup">
+        Wrong Password, Try Again <br>
+        Email <input id="email" > <br>
+        Password <input id="password" > <br>
+         <button type="button" id="btnSignUp" onClick="signUp()">Sign Up or Log-In</button>
+    </div>`
+    } else {
+        fetch("https://acastore.herokuapp.com/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({email,password, cartId}), 
+            })
+            .then(response => response.json())
+            .then(newUserWithId =>{
+                console.log(newUserWithId)
+                sessionStorage.setItem("user", JSON.stringify(newUserWithId))
+                document.getElementById("fakeNav").innerHTML =
+                 `Welcome ` + newUserWithId.email + `, you are logged in!`
+            }) 
+        fetch("https://acastore.herokuapp.com/carts", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({userId:cartId,products:[]}), 
+            })
+            .then(response => response.json())
+            .then(data =>{
+                console.log(data)
+            }) 
+            mainPage(products)
+    }
   }
 
 function searching(){
@@ -135,6 +210,19 @@ function viewCart(){
 }
 
 function addToCart(productNumber){
+    fetch(`https://acastore.herokuapp.com/cart/{cartId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({products: }), 
+        })
+        .then(response => response.json())
+        .then(product =>{
+            console.log(product)
+
+        })
+    console.log(user)
     let product = products[productNumber]
     cart.push([product.name, product.price])
     sessionStorage.setItem("product", JSON.stringify(cart))
@@ -184,7 +272,7 @@ function purchaseCompleting(){
 }
 
 let settingAlert = () => {
-    alert("Are you still there?")
+    console.log("Are you still there?")
 }
 
 
@@ -197,4 +285,53 @@ function pageAlert(){
         timeInterval = true;
         pageAlert()
     }
+}
+
+function addNewItem(){
+    return document.getElementById("itemlist").innerHTML =
+    `<div id="addProducts">
+        Enter something in all boxes please <br>
+        Name <input id="name" > <br>
+        Description <input id="description" > <br>
+        Price <input id="price" > <br>
+        imgUrl <input id="imgUrl"> <br>
+        Category <input id="category"> <br>
+        Rating <input id="rating"> <br>
+        <button type="button" id="add" onClick="addProduct()">Add Product</button>
+
+         </div>`
+}
+
+function addProduct(){
+    let name = document.getElementById("name").value;
+    let description = document.getElementById("description").value;
+    let price = document.getElementById("price").value;
+    let imgUrl = document.getElementById("imgUrl").value;
+    let category = document.getElementById("category").value;
+    let reviews = ['No reviews yet'];
+    let rating = document.getElementById("rating").value;
+    
+    fetch("https://acastore.herokuapp.com/products", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({name,description, price, imgUrl, category, reviews, rating}), 
+        })
+        .then(response => response.json())
+        .then(product =>{
+            console.log(product)
+
+        }) 
+    getProducts().then((products) => {
+        mainPage(products)
+    })
+}
+
+function getProducts(){
+    return fetch("https://acastore.herokuapp.com/products")
+    .then(response=> response.json())
+    .then(productsYeah=>{
+        return productsYeah
+    });
 }

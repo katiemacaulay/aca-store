@@ -7,7 +7,7 @@ Let's use a real backend server to maintain the important information of our sto
 # https://acastore.herokuapp.com
 
 # User
-Now that we are saving the shopping cart on the server, we need to be able to identify who a cart belongs to. Let's have a user sign up with email and password before they can use the store.
+Now that we are saving the shopping cart on the server, we need to be able to identify who a cart belongs to. Let's have a user sign up with email and password before they can use the store. done.
 
 #Sign Up
 When the web page is first opened, show a sign up screen.
